@@ -1,14 +1,28 @@
+import re
+
 from setuptools import setup
 from setuptools import find_packages
-import re
+
+from distutils.version import StrictVersion
 from os.path import abspath, dirname, join
 
-CURDIR = dirname(abspath(__file__))
+try:
+    import robot
+    ROBOT_VERSION = robot.__version__
+    if StrictVersion(ROBOT_VERSION) >= StrictVersion('3.2a1'):
+        requirements = ['robotframework >= 3.1', 'tkinterhtml']
+    else:
+        requirements = ['robotframework >= 3.1']
+except ImportError:
+    requirements = ['robotframework >= 3.1']
 
+
+CURDIR = dirname(abspath(__file__))
 with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
-VERSION = '0.1.0'
+with open(join(CURDIR, 'src', 'Debugger', '__init__.py'), encoding='utf-8') as f:
+    VERSION = re.search("\n__version__ = '(.*)'", f.read()).group(1)
 
 setup(
     name="robotframework-debugger",
@@ -30,6 +44,6 @@ setup(
         "Topic :: Software Development :: Testing :: Acceptance",
         "Framework :: Robot Framework",
     ],
-    install_requires=['robotframework >= 3.2a1', 'tkinterhtml'],
+    install_requires=requirements,
     python_requires='>=3.6'
 )

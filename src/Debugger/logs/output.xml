@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.2a1 (Python 3.7.4 on win32)" generated="20191128 16:16:23.486" rpa="false">
+<suite id="s1" name="MyTest" source="E:\Source\RF-Schulung\02_RobotFiles\TestCases\03_Variables\MyTest.robot">
+<kw name="Set var" type="setup">
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${auth}</arg>
+<arg>Test123</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.396" level="INFO">${auth} = Test123</msg>
+<status status="PASS" starttime="20191128 16:16:26.393" endtime="20191128 16:16:26.396"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${auth}</arg>
+</arguments>
+<status status="PASS" starttime="20191128 16:16:26.398" endtime="20191128 16:16:26.399"></status>
+</kw>
+<status status="PASS" starttime="20191128 16:16:26.391" endtime="20191128 16:16:26.400"></status>
+</kw>
+<test id="s1-t1" name="asdasd">
+<kw name="Log To Console" library="BuiltIn" type="setup">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${Teilnehmer}[0]</arg>
+</arguments>
+<status status="PASS" starttime="20191128 16:16:26.403" endtime="20191128 16:16:26.405"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${Teilnehmer}</arg>
+</arguments>
+<status status="PASS" starttime="20191128 16:16:26.407" endtime="20191128 16:16:26.409"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${User1}</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.412" level="INFO">{'usr': 'rener', 'pwd': '12456', 'freunde': ['Marvin']}</msg>
+<status status="PASS" starttime="20191128 16:16:26.410" endtime="20191128 16:16:26.412"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${User2}</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.414" level="INFO">{'usr': 'christoph', 'pwd': 'test12', 'freunde': ['René', 'Britta', 'Marvin', 'Thomas', 'Kathrin', 'Christoph']}</msg>
+<status status="PASS" starttime="20191128 16:16:26.413" endtime="20191128 16:16:26.414"></status>
+</kw>
+<kw name="Log Many" library="BuiltIn">
+<doc>Logs the given messages as separate entries using the INFO level.</doc>
+<arguments>
+<arg>@{Teilnehmer}</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.416" level="INFO">René</msg>
+<msg timestamp="20191128 16:16:26.416" level="INFO">Britta</msg>
+<msg timestamp="20191128 16:16:26.417" level="INFO">Marvin</msg>
+<msg timestamp="20191128 16:16:26.417" level="INFO">Thomas</msg>
+<msg timestamp="20191128 16:16:26.417" level="INFO">Kathrin</msg>
+<msg timestamp="20191128 16:16:26.417" level="INFO">Christoph</msg>
+<status status="PASS" starttime="20191128 16:16:26.415" endtime="20191128 16:16:26.418"></status>
+</kw>
+<kw name="Log Many" library="BuiltIn">
+<doc>Logs the given messages as separate entries using the INFO level.</doc>
+<arguments>
+<arg>@{Benutzer}</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.420" level="INFO">{'usr': 'rener', 'pwd': '12456', 'freunde': ['Marvin']}</msg>
+<msg timestamp="20191128 16:16:26.420" level="INFO">{'usr': 'christoph', 'pwd': 'test12', 'freunde': ['René', 'Britta', 'Marvin', 'Thomas', 'Kathrin', 'Christoph']}</msg>
+<status status="PASS" starttime="20191128 16:16:26.419" endtime="20191128 16:16:26.421"></status>
+</kw>
+<kw name="Run Keywords" library="BuiltIn">
+<doc>Executes all the given keywords in a sequence.</doc>
+<arguments>
+<arg>log</arg>
+<arg>Hello World</arg>
+<arg>AND</arg>
+<arg>Set Test Variable</arg>
+<arg>${var}</arg>
+<arg>Hello World</arg>
+<arg>AND</arg>
+<arg>Log</arg>
+<arg>${var}</arg>
+</arguments>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>Hello World</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.424" level="INFO">Hello World</msg>
+<status status="PASS" starttime="20191128 16:16:26.423" endtime="20191128 16:16:26.425"></status>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<arguments>
+<arg>${var}</arg>
+<arg>Hello World</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.430" level="INFO">${var} = Hello World</msg>
+<status status="PASS" starttime="20191128 16:16:26.427" endtime="20191128 16:16:26.430"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${var}</arg>
+</arguments>
+<msg timestamp="20191128 16:16:26.432" level="INFO">Hello World</msg>
+<status status="PASS" starttime="20191128 16:16:26.431" endtime="20191128 16:16:26.433"></status>
+</kw>
+<status status="PASS" starttime="20191128 16:16:26.421" endtime="20191128 16:16:26.433"></status>
+</kw>
+<kw name="Debug">
+<arguments>
+<arg>Log to Console</arg>
+<arg>${var}</arg>
+</arguments>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${var}</arg>
+</arguments>
+<status status="PASS" starttime="20191128 16:16:29.086" endtime="20191128 16:16:29.087"></status>
+</kw>
+<msg timestamp="20191128 16:16:29.091" level="INFO">${RETURN_VALUE} = None</msg>
+<msg timestamp="20191128 16:16:30.154" level="FAIL">No keyword with name 'Debug' found.</msg>
+<status status="FAIL" starttime="20191128 16:16:26.465" endtime="20191128 16:16:30.154"></status>
+</kw>
+<tags>
+<tag>ananke</tag>
+<tag>Ersteller:René Rohner</tag>
+</tags>
+<status status="FAIL" starttime="20191128 16:16:26.401" endtime="20191128 16:16:30.420" critical="yes">No keyword with name 'Debug' found.</status>
+</test>
+<kw name="Read Var" type="teardown">
+<kw name="Log ${auth}">
+<msg timestamp="20191128 16:16:30.467" level="FAIL">No keyword with name 'Log ${auth}' found.</msg>
+<status status="FAIL" starttime="20191128 16:16:30.466" endtime="20191128 16:16:30.467"></status>
+</kw>
+<status status="FAIL" starttime="20191128 16:16:30.424" endtime="20191128 16:16:30.737">No keyword with name 'Log ${auth}' found.</status>
+</kw>
+<metadata>
+<item name="Ersteller">René Rohner (imbus)</item>
+</metadata>
+<status status="FAIL" starttime="20191128 16:16:23.579" endtime="20191128 16:16:31.357">Suite teardown failed:
+No keyword with name 'Log ${auth}' found.</status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1">Critical Tests</stat>
+<stat pass="0" fail="1">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="1">ananke</stat>
+<stat pass="0" fail="1">Ersteller:René Rohner</stat>
+</tag>
+<suite>
+<stat pass="0" fail="1" id="s1" name="MyTest">MyTest</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20191128 16:16:30.419" level="ERROR">Calling method 'end_keyword' of listener 'Debugger' failed: TclError: invalid command name "html"</msg>
+<msg timestamp="20191128 16:16:30.734" level="ERROR">Calling method 'end_keyword' of listener 'Debugger' failed: TclError: invalid command name "html"</msg>
+<msg timestamp="20191128 16:16:31.355" level="ERROR">Calling method 'end_keyword' of listener 'Debugger' failed: TclError: invalid command name "html"</msg>
+</errors>
+</robot>
