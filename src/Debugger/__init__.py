@@ -23,7 +23,7 @@ from Debugger.LibDocParser import LibDocParser
 from Debugger.DebuggerGui import DebuggerGui
 from robot.libdoc import libdoc
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 _SUITE_SETUP = 1
 _TEST_CASE = 3

@@ -29,7 +29,7 @@ setup(
     version=VERSION,
     author="René Rohner(Snooz82)",
     author_email="snooz@posteo.de",
-    description="A library for secure password handling.",
+    description="A Robot Framework Listener to try keywords and pause execution on failure",
     long_description=long_description,
     url="https://github.com/Snooz82/robotframework-debugger",
     package_dir={'': 'src'},
