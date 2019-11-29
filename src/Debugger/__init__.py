@@ -39,10 +39,15 @@ class Debugger:
 
     ROBOT_LISTENER_API_VERSION = 2
 
-    def __init__(self, break_on_fail=False):
+    def __init__(self, break_on_fail=True):
+
         self.ROBOT_LIBRARY_LISTENER = self
 
-        self.break_on_fail = break_on_fail
+        if isinstance(break_on_fail, str):
+            self.break_on_fail = not break_on_fail.lower() == 'false'
+        else:
+            self.break_on_fail = bool(break_on_fail)
+
         self.tempdir = tempfile.mkdtemp()
         self.libraries = dict()
         self.log_messages = []
