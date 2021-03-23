@@ -12,27 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import tempfile
 import robot
 
 from tkinter import *
 
 from distutils.version import StrictVersion
-from Debugger.LibDocParser import LibDocParser
 from Debugger.DebuggerGui import DebuggerGui
-from robot.libdoc import libdoc
+from robot.libdocpkg import LibraryDocumentation
 
-__version__ = '0.1.4'
+__version__ = '0.2.0'
 
 _SUITE_SETUP = 1
 _TEST_CASE = 3
 _SUITE_TEARDOWN = 5
-try:
-    import tkinterhtml
-    HTML_ENABLED = StrictVersion(robot.__version__) >= StrictVersion('3.2a1')
-except ImportError:
-    HTML_ENABLED = False
+is_RF_4 = StrictVersion(robot.__version__) >= StrictVersion('4.0.0')
 
 
 class Debugger:
@@ -57,10 +51,7 @@ class Debugger:
         self.test_history = []
         self.setup_history = []
         self.teardown_history = []
-        if HTML_ENABLED:
-            self.libdoc_format = 'XML:HTML'
-        else:
-            self.libdoc_format = 'XML'
+
 
     def debug(self, keyword=None):
         main = Tk()
@@ -95,9 +86,11 @@ class Debugger:
             self.test_history.append(command)
         else:
             self.teardown_history.append(command)
-        if attrs['kwname'].upper() == 'DEBUG':
-            attrs['kwname'] = attrs['args'][0]
-            attrs['args'] = attrs['args'][1:]
+        if attrs['kwname'].upper() in ['DEBUG', 'BREAK']:
+            if attrs['args'][0]:
+                attrs['kwname'] = attrs['args'][0]
+            if attrs['args'][1]:
+                attrs['args'] = attrs['args'][1:]
             self.debug(attrs)
 
     def end_keyword(self, name, attrs):
@@ -126,12 +119,15 @@ class Debugger:
         self._analyse_import(name, attrs, False)
 
     def _analyse_import(self, name, attrs, is_library: bool):
-        outfile = f'{self.tempdir}/{name}.xml'
         if is_library:
-            libdoc(name, outfile, format=self.libdoc_format)
+            libdoc = LibraryDocumentation(name)
         else:
-            libdoc(attrs['source'], outfile, format=self.libdoc_format)
-        library = LibDocParser().parse_libdoc_xml(outfile)
-        if library:
-            self.libraries[library['name']] = library
-        os.remove(outfile)
+            libdoc = LibraryDocumentation(attrs['source'])
+        library = {'name': libdoc.name, 'version': libdoc.version, 'keywords': []}
+        for kw in libdoc.keywords:
+            if is_RF_4:
+                keyword = {'name': kw.name, 'args': [str(arg) for arg in kw.args], 'doc': kw.doc}
+            else:
+                keyword = {'name': kw.name, 'args': kw.args, 'doc': kw.doc}
+            library['keywords'].append(keyword)
+        self.libraries[library['name']] = library

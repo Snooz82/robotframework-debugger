@@ -1,18 +1,9 @@
-import robot
-
 from tkinter import ttk
 from copy import deepcopy
 from tkinter import *
 
 from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
-from distutils.version import StrictVersion
-
-try:
-    from tkinterhtml import HtmlFrame
-    HTML_ENABLED = StrictVersion(robot.__version__) >= StrictVersion('3.2a1')
-except ImportError:
-    HTML_ENABLED = False
 
 
 class DebuggerGui:
@@ -278,20 +269,10 @@ class DebuggerGui:
         self.select_library_command()
 
     def config_documentation_frame(self):
-        if HTML_ENABLED:
-            self.Doc_Frame = HtmlFrame(self.TabKeywords,
-                                       vertical_scrollbar="auto",
-                                       horizontal_scrollbar="auto",
-                                       width=500)
-        else:
-            self.Doc_Frame = Text(self.TabKeywords)
+        self.Doc_Frame = Text(self.TabKeywords)
         self.Doc_Frame.grid_propagate(0)
         self.Doc_Frame.grid(row=0, column=1, rowspan=2, sticky=N + E + S)
-
-        if HTML_ENABLED:
-            self.Doc_Frame.set_content("<html><body>--</body></html>")
-        else:
-            self.Doc_Frame.insert(END, "--")
+        self.Doc_Frame.insert(END, "--")
 
     def config_history_tab(self):
         self.TabHistory = ttk.Frame(self.TNotebook)
@@ -452,24 +433,7 @@ class DebuggerGui:
                 name = self.ListboxKeywords.get(self.ListboxKeywords.curselection()[0])
                 keyword = self.get_keyword_from_library(self.combobox_library_value.get(), name)
                 br = '\n'
-                if HTML_ENABLED:
-                    self.Doc_Frame.set_content(
-                        f"""
-                        <html>
-                        <body>
-                        <h3>Keyword:</h3>
-                        {keyword['name']}
-                        <h3>Arguments:</h3>
-                        {'<br/>'.join(keyword['args'])}
-                        <h3>Documentation:</h3>
-                        {keyword['doc']}
-                        </body>
-                        </html>
-                        """
-                    )
-                else:
-                    self.Doc_Frame.replace(1.0, END,
-                                           f"""Keyword:
+                self.Doc_Frame.replace(1.0, END, f"""Keyword:
 {keyword['name']}
 
 Arguments:
