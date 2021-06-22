@@ -11,8 +11,10 @@ use it as listener
 
 ``robot --listener Debugger myrobotsuite.robot``  
 
-## RF 3.2 and HTML 
+## How it works:
 
-from Robot Framework Version 3.2a1 it is possible to have rendered Keyword Documentation in Debugger.
-If you install robotframework-debugger after you installed robotframework >= 3.2a, it is automatically active.
-If you installed it before, just do ``pip install tkinterhtml`` to enable rich text docs.
+Debugger pauses the execution on a failing keyword or on keywords named `Debug` or `Break`.
+It opens a TKinter based GUI and let you see the error, try out other keywords in exact that situation.
+It also gives access to Robot Frameworks variables and logs a history of passed keyword calles.
+
+### Have Fun
