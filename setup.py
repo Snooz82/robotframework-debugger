@@ -32,5 +32,5 @@ setup(
         "Framework :: Robot Framework",
     ],
     install_requires=['robotframework >= 3.2.1'],
-    python_requires='>=3.6'
+    python_requires='>=3.6',
 )

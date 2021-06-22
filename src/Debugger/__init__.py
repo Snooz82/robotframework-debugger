@@ -21,12 +21,20 @@ from distutils.version import StrictVersion
 from Debugger.DebuggerGui import DebuggerGui
 from robot.libdocpkg import LibraryDocumentation
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 _SUITE_SETUP = 1
 _TEST_CASE = 3
 _SUITE_TEARDOWN = 5
 is_RF_4 = StrictVersion(robot.__version__) >= StrictVersion('4.0.0')
+
+muting_keywords = [
+    "Run Keyword And Ignore Error",
+    "Run Keyword And Expect Error",
+    "Run Keyword And Return Status",
+    "Run Keyword And Warn On Failure",
+    "Wait Until Keyword Succeeds",
+]
 
 
 class Debugger:
@@ -38,10 +46,12 @@ class Debugger:
         self.ROBOT_LIBRARY_LISTENER = self
 
         if isinstance(break_on_fail, str):
-            self.break_on_fail = not break_on_fail.lower() == 'false'
+            self.break_on_fail = break_on_fail.lower() != 'false'
         else:
             self.break_on_fail = bool(break_on_fail)
 
+        self.new_error = True
+        self.mutings = []
         self.tempdir = tempfile.mkdtemp()
         self.libraries = dict()
         self.log_messages = []
@@ -51,7 +61,6 @@ class Debugger:
         self.test_history = []
         self.setup_history = []
         self.teardown_history = []
-
 
     def debug(self, keyword=None):
         main = Tk()
@@ -86,17 +95,23 @@ class Debugger:
             self.test_history.append(command)
         else:
             self.teardown_history.append(command)
+        if attrs['kwname'] in muting_keywords:
+            self.mutings.append(attrs['kwname'])
         if attrs['kwname'].upper() in ['DEBUG', 'BREAK']:
-            if attrs['args'][0]:
+            if len(attrs['args']) == 1:
                 attrs['kwname'] = attrs['args'][0]
-            if attrs['args'][1]:
+            if len(attrs['args']) > 1:
                 attrs['args'] = attrs['args'][1:]
             self.debug(attrs)
+        self.new_error = True
 
     def end_keyword(self, name, attrs):
+        if self.mutings and attrs['kwname'] == self.mutings[-1]:
+            self.mutings.pop()
         self.indent = self.indent - 2
-        if attrs['status'] != 'PASS' and self.break_on_fail:
+        if attrs['status'] == 'FAIL' and self.break_on_fail and self.new_error and not self.mutings:
             self.debug(attrs)
+        self.new_error = False
 
     def end_test(self, name, attrs):
         self.test_phase = _SUITE_TEARDOWN

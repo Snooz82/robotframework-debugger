@@ -7,15 +7,11 @@ from robot.libraries.BuiltIn import BuiltIn
 
 
 class DebuggerGui:
-
-    def __init__(self,
-                 top=None,
-                 libraries=None,
-                 failed_kw=None,
-                 keyword_messages=None,
-                 history=None):
+    def __init__(
+        self, top=None, libraries=None, failed_kw=None, keyword_messages=None, history=None
+    ):
         """This class configures and populates the toplevel window.
-           top is the toplevel containing window."""
+        top is the toplevel containing window."""
 
         _all_libraries_alias = '-- ALL IMPORTS --'
 
@@ -26,8 +22,7 @@ class DebuggerGui:
         else:
             self.library_names = '--'
         if isinstance(failed_kw, dict):
-            self.failed_Command = f'{failed_kw["kwname"]}    ' \
-                                  f'{"    ".join(failed_kw["args"])}'
+            self.failed_Command = f'{failed_kw["kwname"]}    ' f'{"    ".join(failed_kw["args"])}'
         else:
             self.failed_Command = ''
         self.keyword_messages = keyword_messages
@@ -121,7 +116,7 @@ class DebuggerGui:
             '${False}',
             '${True}',
             '${null}',
-            '${None}'
+            '${None}',
         ]
         return _built_in_variables
 
@@ -146,24 +141,28 @@ class DebuggerGui:
         self.menu_bar = Menu(self.top)
         self.top.configure(menu=self.menu_bar)
         self.file_menu = Menu(self.top, tearoff=0)
-        self.menu_bar.add_cascade(menu=self.file_menu,
-                                  compound="left",
-                                  label="File")
-        self.file_menu.add_command(accelerator="CRTL + S",
-                                   label="Save History")
+        self.menu_bar.add_cascade(menu=self.file_menu, compound="left", label="File")
+        self.file_menu.add_command(accelerator="CRTL + S", label="Save History")
         self.option_menu = Menu(self.top, tearoff=0)
-        self.menu_bar.add_cascade(menu=self.option_menu,
-                                  compound="left",
-                                  label="Options")
-        self.option_menu.add_checkbutton(variable=self.option_filter_keyword,
-                                         onvalue=True, offvalue=False,
-                                         label="Filter Keyword List")
-        self.option_menu.add_checkbutton(variable=self.option_add_default_param,
-                                         onvalue=True, offvalue=False,
-                                         label="Add Default Parameter")
-        self.option_menu.add_checkbutton(variable=self.option_insert_history_below,
-                                         onvalue=True, offvalue=False,
-                                         label="Insert History Below")
+        self.menu_bar.add_cascade(menu=self.option_menu, compound="left", label="Options")
+        self.option_menu.add_checkbutton(
+            variable=self.option_filter_keyword,
+            onvalue=True,
+            offvalue=False,
+            label="Filter Keyword List",
+        )
+        self.option_menu.add_checkbutton(
+            variable=self.option_add_default_param,
+            onvalue=True,
+            offvalue=False,
+            label="Add Default Parameter",
+        )
+        self.option_menu.add_checkbutton(
+            variable=self.option_insert_history_below,
+            onvalue=True,
+            offvalue=False,
+            label="Insert History Below",
+        )
         self.option_filter_keyword.set(True)
         self.option_insert_history_below.set(True)
 
@@ -176,12 +175,23 @@ class DebuggerGui:
     def config_command_entry_field(self):
         self.EntryCommand = ttk.Entry(self.MainFrame)
         self.EntryCommand.grid(row=0, column=0, columnspan=7, sticky=N + W + E)
-        validate_command = (self.EntryCommand.register(self.validate_command_entry),
-                            '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
-        self.EntryCommand.configure(textvariable=self.command_value,
-                                    font="TkFixedFont",
-                                    validate="key",
-                                    validatecommand=validate_command)
+        validate_command = (
+            self.EntryCommand.register(self.validate_command_entry),
+            '%d',
+            '%i',
+            '%P',
+            '%s',
+            '%S',
+            '%v',
+            '%V',
+            '%W',
+        )
+        self.EntryCommand.configure(
+            textvariable=self.command_value,
+            font="TkFixedFont",
+            validate="key",
+            validatecommand=validate_command,
+        )
         self.EntryCommand.bind('<Return>', self.execute_command)
         self.EntryCommand.bind('<Control-space>', self.set_focus_to_keyword_list)
         self.EntryCommand.bind('<Escape>', self.clear_keyword_filter)
@@ -191,15 +201,14 @@ class DebuggerGui:
     def config_execute_button(self):
         self.ButtonExecute = ttk.Button(self.MainFrame)
         self.ButtonExecute.grid(row=0, column=7, columnspan=1, sticky=W)
-        self.ButtonExecute.configure(text='''Execute''',
-                                     command=self.execute_command)
+        self.ButtonExecute.configure(text='''Execute''', command=self.execute_command)
 
     def config_execution_result_label(self):
         self.LabelExecutionResult = ttk.Label(self.MainFrame)
         self.LabelExecutionResult.grid(row=1, column=1, sticky=W)
-        self.LabelExecutionResult.configure(text='''FAIL''',
-                                            font="TkFixedFont",
-                                            textvariable=self.label_value)
+        self.LabelExecutionResult.configure(
+            text='''FAIL''', font="TkFixedFont", textvariable=self.label_value
+        )
         self.label_value.set(self.keyword_messages)
 
     def config_notebook(self):
@@ -208,22 +217,13 @@ class DebuggerGui:
         self.TNotebook.configure(takefocus="")
         self.config_keywords_tab()
         self.TNotebook.add(self.TabKeywords, padding=3)
-        self.TNotebook.tab(0,
-                           text="Keywords",
-                           compound="left",
-                           underline="-1")
+        self.TNotebook.tab(0, text="Keywords", compound="left", underline="-1")
         self.config_history_tab()
         self.TNotebook.add(self.TabHistory, padding=3)
-        self.TNotebook.tab(1,
-                           text="History",
-                           compound="left",
-                           underline="-1")
+        self.TNotebook.tab(1, text="History", compound="left", underline="-1")
         self.config_variables_tab()
         self.TNotebook.add(self.TabVariables, padding=3)
-        self.TNotebook.tab(2,
-                           text="Variables",
-                           compound="left",
-                           underline="-1")
+        self.TNotebook.tab(2, text="Variables", compound="left", underline="-1")
 
     def config_keywords_tab(self):
         self.TabKeywords = ttk.Frame(self.TNotebook)
@@ -236,11 +236,10 @@ class DebuggerGui:
     def config_library_combobox(self):
         self.ComboboxLibrary = ttk.Combobox(self.TabKeywords)
         self.ComboboxLibrary.grid(row=0, column=0, sticky=N + E + S + W)
-        self.ComboboxLibrary.configure(textvariable=self.combobox_library_value,
-                                       takefocus="",
-                                       state="readonly")
-        self.ComboboxLibrary.bind("<<ComboboxSelected>>",
-                                  self.select_library_command)
+        self.ComboboxLibrary.configure(
+            textvariable=self.combobox_library_value, takefocus="", state="readonly"
+        )
+        self.ComboboxLibrary.bind("<<ComboboxSelected>>", self.select_library_command)
         self.ComboboxLibrary['values'] = self.library_names
         self.combobox_library_value.set(self.library_names[0])
 
@@ -251,21 +250,16 @@ class DebuggerGui:
         self.ListboxKeywordsScrollBar = Scrollbar(self.ListboxKeywordsFrame)
         self.ListboxKeywords.pack(side=LEFT, fill='both', expand=1, anchor='sw')
         self.ListboxKeywordsScrollBar.pack(side=LEFT, fill='y', anchor='se')
-        self.ListboxKeywords.config(font="TkFixedFont",
-                                    yscrollcommand=self.ListboxKeywordsScrollBar.set)
+        self.ListboxKeywords.config(
+            font="TkFixedFont", yscrollcommand=self.ListboxKeywordsScrollBar.set
+        )
         self.ListboxKeywordsScrollBar.config(command=self.ListboxKeywords.yview)
-        self.ListboxKeywords.bind('<Double-Button-1>',
-                                  self.select_keyword_command)
-        self.ListboxKeywords.bind('<<ListboxSelect>>',
-                                  self.click_keyword_command)
-        self.ListboxKeywords.bind('<FocusIn>',
-                                  self.click_keyword_command)
-        self.ListboxKeywords.bind('<Return>',
-                                  self.select_keyword_command)
-        self.ListboxKeywords.bind('<Control-Return>',
-                                  self.select_keyword_command)
-        self.ListboxKeywords.bind('<Escape>',
-                                  self.clear_keyword_filter)
+        self.ListboxKeywords.bind('<Double-Button-1>', self.select_keyword_command)
+        self.ListboxKeywords.bind('<<ListboxSelect>>', self.click_keyword_command)
+        self.ListboxKeywords.bind('<FocusIn>', self.click_keyword_command)
+        self.ListboxKeywords.bind('<Return>', self.select_keyword_command)
+        self.ListboxKeywords.bind('<Control-Return>', self.select_keyword_command)
+        self.ListboxKeywords.bind('<Escape>', self.clear_keyword_filter)
         self.select_library_command()
 
     def config_documentation_frame(self):
@@ -283,10 +277,8 @@ class DebuggerGui:
     def config_history_listbox(self):
         self.ListboxHistory = Listbox(self.TabHistory)
         self.ListboxHistory.grid(column=0, row=0, sticky=N + S + E + W)
-        self.ListboxHistory.configure(font="TkFixedFont",
-                                      selectmode=EXTENDED)
-        self.ListboxHistory.bind('<Double-Button-1>',
-                                 self.select_history_command)
+        self.ListboxHistory.configure(font="TkFixedFont", selectmode=EXTENDED)
+        self.ListboxHistory.bind('<Double-Button-1>', self.select_history_command)
         if self.history:
             for commands in self.history:
                 self._add_to_history_listbox(commands)
@@ -305,33 +297,34 @@ class DebuggerGui:
     def config_variables_name_field(self):
         self.EntryVariableName = ttk.Entry(self.TabVariables)
         self.EntryVariableName.grid(row=0, column=0, sticky=W + E)
-        self.EntryVariableName.configure(textvariable=self.variable_name_value,
-                                         font="TkFixedFont",
-                                         validate="key")
+        self.EntryVariableName.configure(
+            textvariable=self.variable_name_value, font="TkFixedFont", validate="key"
+        )
         self.EntryVariableName.bind('<Return>', self.set_variable)
 
     def config_variables_value_field(self):
         self.EntryVariableValue = ttk.Entry(self.TabVariables)
         self.EntryVariableValue.grid(row=0, column=1, sticky=W + E)
-        self.EntryVariableValue.configure(textvariable=self.variable_value_value,
-                                          font="TkFixedFont",
-                                          validate="key")
+        self.EntryVariableValue.configure(
+            textvariable=self.variable_value_value, font="TkFixedFont", validate="key"
+        )
         self.EntryVariableValue.bind('<Return>', self.set_variable)
         self.EntryVariableValue.bind('<Tab>', self._select_next_arg)
 
     def config_set_variables_button(self):
         self.ButtonSetVariable = ttk.Button(self.TabVariables)
         self.ButtonSetVariable.grid(row=0, column=2, sticky=E)
-        self.ButtonSetVariable.configure(text='''Set Variable''',
-                                         command=self.set_variable)
+        self.ButtonSetVariable.configure(text='''Set Variable''', command=self.set_variable)
 
     def config_variables_lsitbox_options(self):
         self.FrameVariablesOptions = ttk.Frame(self.TabVariables)
         self.FrameVariablesOptions.grid(row=1, column=0, columnspan=6, sticky=W + E + S + N)
-        self.CheckbtnBuiltInVariables = ttk.Checkbutton(self.FrameVariablesOptions,
-                                                        text="Show Built-In Variables",
-                                                        variable=self.show_builtin_vars,
-                                                        command=self.update_variables_list)
+        self.CheckbtnBuiltInVariables = ttk.Checkbutton(
+            self.FrameVariablesOptions,
+            text="Show Built-In Variables",
+            variable=self.show_builtin_vars,
+            command=self.update_variables_list,
+        )
         self.CheckbtnBuiltInVariables.grid(row=0, column=0)
 
     def config_variables_listbox(self):
@@ -339,15 +332,11 @@ class DebuggerGui:
         self.VariableFrame.grid(row=2, column=0, columnspan=6, rowspan=6, sticky=W + E + S + N)
         self.ListboxVariables = Listbox(self.VariableFrame)
         self.ListboxVariablesScrollBar = Scrollbar(self.VariableFrame)
-        self.ListboxVariables.pack(side=LEFT,
-                                   fill='both',
-                                   expand=1,
-                                   anchor='sw')
-        self.ListboxVariablesScrollBar.pack(side=LEFT,
-                                            fill='y',
-                                            anchor='se')
-        self.ListboxVariables.config(font="TkFixedFont",
-                                     yscrollcommand=self.ListboxVariablesScrollBar.set)
+        self.ListboxVariables.pack(side=LEFT, fill='both', expand=1, anchor='sw')
+        self.ListboxVariablesScrollBar.pack(side=LEFT, fill='y', anchor='se')
+        self.ListboxVariables.config(
+            font="TkFixedFont", yscrollcommand=self.ListboxVariablesScrollBar.set
+        )
         self.ListboxVariablesScrollBar.config(command=self.ListboxVariables.yview)
         self.ListboxVariables.bind('<F5>', self.update_variables_list)
         self.ListboxVariables.bind('<<ListboxSelect>>', self.select_variable)
@@ -356,8 +345,7 @@ class DebuggerGui:
     def execute_command(self, event=None):
         commands = self._get_command()
         try:
-            self.LabelExecutionResult. \
-                configure(text=f'Sent:  {"    ".join(commands)}')
+            self.LabelExecutionResult.configure(text=f'Sent:  {"    ".join(commands)}')
             return_value = BuiltIn().run_keyword(*commands)
             if isinstance(return_value, str):
                 return_value = repr(return_value)[1:-1]
@@ -409,12 +397,16 @@ class DebuggerGui:
                 self.ListboxKeywords.insert(END, keyword['name'])
 
     def select_keyword_command(self, event=None):
-        keyword_dict = self.get_keyword_from_library(self.combobox_library_value.get(),
-                                                     self.ListboxKeywords.get(ACTIVE))
+        keyword_dict = self.get_keyword_from_library(
+            self.combobox_library_value.get(), self.ListboxKeywords.get(ACTIVE)
+        )
         if keyword_dict:
             args = keyword_dict["args"]
             keyword = keyword_dict["name"]
-            if self._is_modifier_used(event.state, 'Control') == self.option_add_default_param.get():
+            if (
+                self._is_modifier_used(event.state, 'Control')
+                == self.option_add_default_param.get()
+            ):
                 args = [x for x in args if '=' not in x]
             self.command_value.set(f'{keyword}    {"    ".join(args)}')
             self.EntryCommand.focus_set()
@@ -433,14 +425,18 @@ class DebuggerGui:
                 name = self.ListboxKeywords.get(self.ListboxKeywords.curselection()[0])
                 keyword = self.get_keyword_from_library(self.combobox_library_value.get(), name)
                 br = '\n'
-                self.Doc_Frame.replace(1.0, END, f"""Keyword:
+                self.Doc_Frame.replace(
+                    1.0,
+                    END,
+                    f"""Keyword:
 {keyword['name']}
 
 Arguments:
 {br.join(keyword['args'])}
 
 Documentation:
-{keyword['doc']}""")
+{keyword['doc']}""",
+                )
             except Exception as e:
                 print(e)
 
@@ -468,8 +464,7 @@ Documentation:
             if not self.show_builtin_vars.get() and variable in self.built_in_variables:
                 continue
             i = len(longest_var_name) - len(variable)
-            self.ListboxVariables.insert(END,
-                                         f'{variable}=    {i * " "}{str(variables[variable])}')
+            self.ListboxVariables.insert(END, f'{variable}=    {i * " "}{str(variables[variable])}')
 
     def select_variable(self, event=None):
         if event.x_root < 0:
@@ -515,9 +510,7 @@ Documentation:
     def _try_str_var(self, name, value):
         if isinstance(value, str):
             if '  ' in value or name[0] == '@':
-                value = [v.strip()
-                         for v in value.split('  ')
-                         if v.strip() != '']
+                value = [v.strip() for v in value.split('  ') if v.strip() != '']
                 self._try_list_var(name, value)
             elif name[0] in '$&':
                 BuiltIn().set_test_variable(name, value)
@@ -533,9 +526,21 @@ Documentation:
     @staticmethod
     def _is_modifier_used(state, modifier):
         if isinstance(state, int):
-            mods = ('Shift', 'Lock', 'Control',
-                    'Mod1', 'Mod2', 'Mod3', 'Mod4', 'Mod5',
-                    'Button1', 'Button2', 'Button3', 'Button4', 'Button5')
+            mods = (
+                'Shift',
+                'Lock',
+                'Control',
+                'Mod1',
+                'Mod2',
+                'Mod3',
+                'Mod4',
+                'Mod5',
+                'Button1',
+                'Button2',
+                'Button3',
+                'Button4',
+                'Button5',
+            )
             s = []
             for i, n in enumerate(mods):
                 if state & (1 << i):
@@ -559,9 +564,11 @@ Documentation:
     def _move_backward(self, entry):
         text = entry.get()
         index = entry.index(INSERT)
-        if not (text[index:index + 2] == '  '
-                or text[index - 1:index + 1] == '  '
-                or text[index - 2:index] == '  '):
+        if not (
+            text[index : index + 2] == '  '
+            or text[index - 1 : index + 1] == '  '
+            or text[index - 2 : index] == '  '
+        ):
             index = text[:index].rfind('  ') + len('  ')
         arg_end = index - (len(text[:index]) - len(text[:index].rstrip()))
         space_index = text[:arg_end].rfind('  ')
@@ -570,9 +577,11 @@ Documentation:
         else:
             next_space = len(text[:arg_end]) - (space_index + len('  '))
             arg_start = arg_end - next_space
-        if (entry.selection_present()
-                and entry.index(SEL_FIRST) == arg_start
-                and entry.index(SEL_LAST) == arg_end):
+        if (
+            entry.selection_present()
+            and entry.index(SEL_FIRST) == arg_start
+            and entry.index(SEL_LAST) == arg_end
+        ):
             entry.icursor(arg_start - 1)
             entry.selection_clear()
             self._move_backward(entry)
@@ -584,9 +593,11 @@ Documentation:
     def _move_forward(self, entry):
         text = entry.get()
         index = entry.index(INSERT)
-        if not (text[index:index + 2] == '  '
-                or text[index - 1:index + 1] == '  '
-                or text[index - 2:index] == '  '):
+        if not (
+            text[index : index + 2] == '  '
+            or text[index - 1 : index + 1] == '  '
+            or text[index - 2 : index] == '  '
+        ):
             if text[index:].find('  ') == -1:
                 entry.delete(0, END)
                 entry.insert(0, f'{text}    ')
@@ -599,9 +610,11 @@ Documentation:
             arg_end = len(text)
         else:
             arg_end = arg_start + next_space
-        if (entry.selection_present()
-                and entry.index(SEL_FIRST) == arg_start
-                and entry.index(SEL_LAST) == arg_end):
+        if (
+            entry.selection_present()
+            and entry.index(SEL_FIRST) == arg_start
+            and entry.index(SEL_LAST) == arg_end
+        ):
             entry.icursor(arg_start + 1)
             entry.selection_clear()
             self._move_forward(entry)
