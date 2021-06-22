@@ -2,3 +2,6 @@ include *.txt
 include LICENSE
 recursive-include src *.html
 recursive-include src *.xml
+
+# added by check-manifest
+recursive-include atest *.robot
